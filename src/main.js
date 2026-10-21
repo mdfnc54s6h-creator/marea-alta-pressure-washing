@@ -81,6 +81,61 @@ document.querySelector('#main').innerHTML = `
       <article class="stain-card"><span class="stain-swatch swatch-weeds"></span><div><h2>Joint weeds</h2><p>Edges are cleaned carefully, joint by joint.</p></div></article>
     </div>
   </section>
+
+  <section class="wash-section roof-wash" id="house-roof" aria-labelledby="roof-title">
+    <div class="wash-stage">
+      <img class="wash-image wash-dirty" src="/images/placeholder-roof-dirty.svg" alt="" />
+      <img class="wash-image wash-clean" src="/images/placeholder-roof-clean.svg" alt="" />
+      <div class="wash-shade" aria-hidden="true"></div>
+      <div class="curb-score" aria-label="Curb appeal score: 41 out of 100">
+        <svg class="score-ring" viewBox="0 0 64 64" aria-hidden="true"><circle class="score-track" cx="32" cy="32" r="25"/><circle class="score-value-ring" cx="32" cy="32" r="25"/></svg>
+        <span class="score-copy"><span class="score-label">Curb appeal</span><span><strong class="score-number">41</strong><span class="score-max"> / 100</span></span></span>
+      </div>
+      <div class="wash-copy">
+        <p class="wash-kicker">The roof wash</p>
+        <h2 id="roof-title">Those black streaks are alive.</h2>
+        <p>The dark streaks are algae (<i>Gloeocapsa magma</i>) feeding on your shingles. We never pressure wash roofs. We soft wash them.</p>
+      </div>
+      <span class="wash-location">Santo Domingo · soft wash</span>
+    </div>
+  </section>
+
+  <section class="wash-section siding-wash" id="siding-wash" aria-labelledby="siding-title">
+    <div class="wash-stage">
+      <img class="wash-image wash-dirty" src="/images/placeholder-siding-dirty.svg" alt="" />
+      <img class="wash-image wash-clean" src="/images/placeholder-siding-clean.svg" alt="" />
+      <div class="wash-shade" aria-hidden="true"></div>
+      <div class="curb-score" aria-label="Curb appeal score: 41 out of 100">
+        <svg class="score-ring" viewBox="0 0 64 64" aria-hidden="true"><circle class="score-track" cx="32" cy="32" r="25"/><circle class="score-value-ring" cx="32" cy="32" r="25"/></svg>
+        <span class="score-copy"><span class="score-label">Curb appeal</span><span><strong class="score-number">41</strong><span class="score-max"> / 100</span></span></span>
+      </div>
+      <div class="wash-copy">
+        <p class="wash-kicker">The right pressure</p>
+        <h2 id="siding-title">Low pressure. Real chemistry.</h2>
+        <p>We let the cleaning solution do the hard work, then rinse gently to lift algae without beating up your siding.</p>
+      </div>
+      <span class="wash-location">Santo Domingo · siding wash</span>
+    </div>
+  </section>
+
+  <section class="comparison-section" id="before-after" aria-labelledby="comparison-title">
+    <div class="comparison-heading">
+      <div>
+        <p class="comparison-kicker">The proof is in the rinse</p>
+        <h2 id="comparison-title">Same house. One visit.</h2>
+      </div>
+      <p>Drag the line. Nothing was painted, replaced, or edited out. Just washed.</p>
+    </div>
+    <figure class="comparison-frame" id="comparison-frame" style="--split: 50%">
+      <img class="comparison-image comparison-before" src="/images/placeholder-house-comparison-before.svg" alt="House with algae-stained light siding and a pressure-washing trailer in the driveway" />
+      <img class="comparison-image comparison-after" src="/images/placeholder-house-comparison-after.svg" alt="The same house with clean light siding and the same pressure-washing trailer in the driveway" />
+      <span class="comparison-tag tag-before" aria-hidden="true">Before</span>
+      <span class="comparison-tag tag-after" aria-hidden="true">After</span>
+      <span class="comparison-divider" aria-hidden="true"><span class="divider-grip"><i></i><i></i></span></span>
+      <input class="compare-range" id="compare-range" type="range" min="0" max="100" value="50" aria-label="Before and after comparison. Drag to reveal the clean house." aria-valuetext="50% before, 50% after" />
+      <figcaption class="sr-only">A before and after view of a home exterior cleaned in one visit. The trailer and equipment remain in the driveway in both images.</figcaption>
+    </figure>
+  </section>
 `;
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -408,9 +463,68 @@ Promise.all([new Promise((resolve) => { cleanImage.onload = resolve; }), new Pro
 });
 
 const motion = createMotionSystem();
+const scoreState = { value: 41 };
+const scoreCircumference = 2 * Math.PI * 25;
+const scoreRings = document.querySelectorAll('.score-value-ring');
+const scoreCards = document.querySelectorAll('.curb-score');
+
+function updateCurbScore(value) {
+  const score = Math.round(value);
+  scoreRings.forEach((ring) => {
+    ring.style.strokeDasharray = `${scoreCircumference}`;
+    ring.style.strokeDashoffset = `${scoreCircumference * (1 - score / 100)}`;
+  });
+  scoreCards.forEach((card) => {
+    card.setAttribute('aria-label', `Curb appeal score: ${score} out of 100`);
+    card.querySelector('.score-number').textContent = String(score);
+  });
+}
+
+const scrollAnimations = gsap.matchMedia();
+scrollAnimations.add('(prefers-reduced-motion: no-preference)', () => {
+  document.querySelectorAll('.wash-section').forEach((section) => {
+    const cleanLayer = section.querySelector('.wash-clean');
+    gsap.fromTo(cleanLayer, { autoAlpha: 0, y: 18 }, {
+      autoAlpha: 1,
+      y: 0,
+      ease: 'none',
+      scrollTrigger: { trigger: section, start: 'top 78%', end: 'bottom 27%', scrub: true },
+    });
+  });
+
+  gsap.to(scoreState, {
+    value: 87,
+    ease: 'none',
+    onUpdate: () => updateCurbScore(scoreState.value),
+    scrollTrigger: {
+      trigger: '#house-roof',
+      start: 'top 78%',
+      endTrigger: '#siding-wash',
+      end: 'bottom 27%',
+      scrub: true,
+    },
+  });
+});
+
+const onReducedMotionChange = (event) => updateCurbScore(event.matches ? 87 : 41);
+reducedMotion.addEventListener('change', onReducedMotionChange);
+if (reducedMotion.matches) updateCurbScore(87);
+
+const comparison = document.querySelector('#comparison-frame');
+const comparisonRange = document.querySelector('#compare-range');
+function updateComparison() {
+  const split = Number(comparisonRange.value);
+  comparison.style.setProperty('--split', `${split}%`);
+  comparisonRange.setAttribute('aria-valuetext', `${split}% before, ${100 - split}% after`);
+}
+comparisonRange.addEventListener('input', updateComparison);
+comparisonRange.addEventListener('change', updateComparison);
+
 if (import.meta.hot) {
   import.meta.hot.dispose(() => {
     motion.destroy();
+    scrollAnimations.revert();
+    reducedMotion.removeEventListener('change', onReducedMotionChange);
     resizeObserver?.disconnect();
     if (particleFrame) cancelAnimationFrame(particleFrame);
     if (automation) automation.kill();
