@@ -15,20 +15,20 @@ const gaugeTicks = Array.from({ length: 41 }, (_, index) => {
 
 document.querySelector('#main').innerHTML = `
   <header class="site-header">
-    <a class="brand" href="#top" aria-label="Marea Alta, inicio">
+    <a class="brand" href="#top" aria-label="Marea Alta, home">
       ${brandMark}<span class="brand-name">Marea Alta</span>
     </a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Abrir navegación">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation">
       <span></span><span></span>
     </button>
-    <nav class="primary-nav" id="primary-nav" aria-label="Navegación principal">
+    <nav class="primary-nav" id="primary-nav" aria-label="Main navigation">
       <a href="#try-the-wand">Try the wand</a>
       <a href="#house-roof">House &amp; roof</a>
       <a href="#before-after">Before / after</a>
       <a href="#instant-quote">Instant quote</a>
       <a href="#packages">Packages</a>
     </nav>
-    <a class="quote-button" href="#instant-quote">Free quote</a>
+      <a class="quote-button" href="#instant-quote">Free quote</a>
   </header>
 
   <section class="hero" id="top" aria-labelledby="hero-title">
@@ -93,8 +93,8 @@ document.querySelector('#main').innerHTML = `
 
   <section class="wash-section roof-wash" id="house-roof" aria-labelledby="roof-title">
     <div class="wash-stage">
-      <img class="wash-image wash-dirty" src="/images/placeholder-roof-dirty.svg" alt="" />
-      <img class="wash-image wash-clean" src="/images/placeholder-roof-clean.svg" alt="" />
+      <img class="wash-image wash-dirty" src="/images/placeholder-roof-dirty.svg" alt="A brick house roof with dark algae streaks before a soft wash" loading="lazy" decoding="async" />
+      <img class="wash-image wash-clean" src="/images/placeholder-roof-clean.svg" alt="The same brick roof after the algae streaks have been treated" loading="lazy" decoding="async" />
       <div class="wash-shade" aria-hidden="true"></div>
       <div class="curb-score" aria-label="Curb appeal score: 41 out of 100">
         <svg class="score-ring" viewBox="0 0 64 64" aria-hidden="true"><circle class="score-track" cx="32" cy="32" r="25"/><circle class="score-value-ring" cx="32" cy="32" r="25"/></svg>
@@ -111,8 +111,8 @@ document.querySelector('#main').innerHTML = `
 
   <section class="wash-section siding-wash" id="siding-wash" aria-labelledby="siding-title">
     <div class="wash-stage">
-      <img class="wash-image wash-dirty" src="/images/placeholder-siding-dirty.svg" alt="" />
-      <img class="wash-image wash-clean" src="/images/placeholder-siding-clean.svg" alt="" />
+      <img class="wash-image wash-dirty" src="/images/placeholder-siding-dirty.svg" alt="Green algae on white house siding before a low-pressure wash" loading="lazy" decoding="async" />
+      <img class="wash-image wash-clean" src="/images/placeholder-siding-clean.svg" alt="Technician rinsing clean white siding with low pressure" loading="lazy" decoding="async" />
       <div class="wash-shade" aria-hidden="true"></div>
       <div class="curb-score" aria-label="Curb appeal score: 41 out of 100">
         <svg class="score-ring" viewBox="0 0 64 64" aria-hidden="true"><circle class="score-track" cx="32" cy="32" r="25"/><circle class="score-value-ring" cx="32" cy="32" r="25"/></svg>
@@ -136,8 +136,8 @@ document.querySelector('#main').innerHTML = `
       <p>Drag the line. Nothing was painted, replaced, or edited out. Just washed.</p>
     </div>
     <figure class="comparison-frame" id="comparison-frame" style="--split: 50%">
-      <img class="comparison-image comparison-before" src="/images/placeholder-house-comparison-before.svg" alt="House with algae-stained light siding and a pressure-washing trailer in the driveway" />
-      <img class="comparison-image comparison-after" src="/images/placeholder-house-comparison-after.svg" alt="The same house with clean light siding and the same pressure-washing trailer in the driveway" />
+      <img class="comparison-image comparison-before" src="/images/placeholder-house-comparison-before.svg" alt="House with algae-stained light siding and a pressure-washing trailer in the driveway" loading="lazy" decoding="async" />
+      <img class="comparison-image comparison-after" src="/images/placeholder-house-comparison-after.svg" alt="The same house with clean light siding and the same pressure-washing trailer in the driveway" loading="lazy" decoding="async" />
       <span class="comparison-tag tag-before" aria-hidden="true">Before</span>
       <span class="comparison-tag tag-after" aria-hidden="true">After</span>
       <span class="comparison-divider" aria-hidden="true"><span class="divider-grip"><i></i><i></i></span></span>
@@ -215,7 +215,55 @@ document.querySelector('#main').innerHTML = `
       </form>
     </div>
   </section>
+
+  <!-- Keep package starting prices aligned with index.html LocalBusiness offers. -->
+  <section class="packages-section" id="packages" aria-labelledby="packages-title">
+    <div class="packages-heading"><p class="section-eyebrow">Straightforward starting points</p><h2 id="packages-title">Pick the clean you need.</h2><p>Every home is different. These packages give you a clear place to start, then we confirm the price for your property.</p></div>
+    <div class="package-grid">
+      <article class="package-card">
+        <p class="package-label">A front-of-house refresh</p><h3>Curb Refresh</h3>
+        <p class="package-price"><span>Starting at</span><strong>$189</strong></p>
+        <p class="package-description">Clean the hard surfaces guests and neighbors notice first.</p>
+        <ul><li>Driveway pressure wash</li><li>Front walk and entry</li><li>Spot treatment for common stains</li></ul>
+        <a class="package-button" href="#instant-quote">Price my curb refresh <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="package-card package-featured">
+        <span class="package-badge">Most chosen</span><p class="package-label">The complete outside clean</p><h3>Full Exterior</h3>
+        <p class="package-price"><span>Starting at</span><strong>$725</strong></p>
+        <p class="package-description">Refresh the main surfaces around your home in one visit.</p>
+        <ul><li>House siding soft wash</li><li>Roof soft wash</li><li>Driveway and front walk</li><li>Exterior gutter face rinse</li></ul>
+        <a class="package-button" href="#instant-quote">Price my full exterior <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="package-card">
+        <p class="package-label">A clean slate outdoors</p><h3>Total Reset</h3>
+        <p class="package-price"><span>Starting at</span><strong>$1,195</strong></p>
+        <p class="package-description">Take care of the house and the outdoor areas all at once.</p>
+        <ul><li>Everything in Full Exterior</li><li>Deck or patio wash</li><li>Fence wash</li><li>Detailed perimeter rinse</li></ul>
+        <a class="package-button" href="#instant-quote">Price my total reset <span aria-hidden="true">→</span></a>
+      </article>
+    </div>
+    <p class="package-note">Starting prices are examples in US dollars. Final pricing depends on home size, access, and buildup.</p>
+  </section>
 `;
+
+document.querySelector('#main').insertAdjacentHTML('afterend', `
+  <footer class="site-footer" aria-labelledby="footer-title">
+    <div class="footer-top">
+      <div class="footer-brand-block">
+        <a class="brand footer-brand" href="#top" aria-label="Marea Alta, back to top">${brandMark}<span class="brand-name">Marea Alta</span></a>
+        <p>Exterior cleaning with a lighter touch.</p>
+        <a class="footer-phone" href="tel:+18095550142">+1 (809) 555-0142</a>
+      </div>
+      <div class="footer-service-area"><h2 id="footer-title">Serving Santo Domingo</h2><p>Residential exterior cleaning across the Distrito Nacional, including Piantini, Naco, Bella Vista, and nearby neighborhoods.</p><p class="footer-insurance">Insured exterior cleaning · Santo Domingo, D.N.</p></div>
+      <div class="footer-social"><span>Keep in touch</span><div class="social-links">
+        <a href="https://www.instagram.com/mareaalta.do/" target="_blank" rel="noopener noreferrer" aria-label="Marea Alta on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle class="social-dot" cx="17.5" cy="6.7" r=".8"/></svg></a>
+        <a href="https://www.facebook.com/mareaalta.do/" target="_blank" rel="noopener noreferrer" aria-label="Marea Alta on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.1 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.6 1.6-1.6h1.7V3.5c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.3v2.2H8.2V13h2.7v8z"/></svg></a>
+      </div></div>
+    </div>
+    <div class="footer-bottom"><span>© <span id="copyright-year">2026</span> Marea Alta. Made for a cleaner first impression.</span><a class="footer-cta" href="#instant-quote">Free quote <span aria-hidden="true">↗</span></a></div>
+  </footer>
+`);
+document.querySelector('#copyright-year').textContent = String(new Date().getFullYear());
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const driveway = document.querySelector('#driveway');
@@ -522,14 +570,14 @@ proButton.addEventListener('click', runProPass);
 navToggle.addEventListener('click', () => {
   const expanded = navToggle.getAttribute('aria-expanded') === 'true';
   navToggle.setAttribute('aria-expanded', String(!expanded));
-  navToggle.setAttribute('aria-label', expanded ? 'Abrir navegación' : 'Cerrar navegación');
+  navToggle.setAttribute('aria-label', expanded ? 'Open navigation' : 'Close navigation');
   nav.classList.toggle('is-open', !expanded);
 });
 nav.addEventListener('click', (event) => {
   if (event.target.closest('a')) {
     nav.classList.remove('is-open');
     navToggle.setAttribute('aria-expanded', 'false');
-    navToggle.setAttribute('aria-label', 'Abrir navegación');
+    navToggle.setAttribute('aria-label', 'Open navigation');
   }
 });
 
@@ -657,6 +705,7 @@ function updateQuote() {
   const size = Number(homeSize.value);
   const selected = selectedQuoteSurfaces();
   const scale = size / 2200;
+  // Example USD rates only; replace these with the business's approved pricing model.
   const surfaceCosts = { house: 300 * scale, roof: 340 * scale, driveway: 265 * Math.sqrt(scale), deck: 250 * Math.sqrt(scale), gutters: 180 * Math.sqrt(scale) };
   const base = selected.reduce((sum, surface) => sum + surfaceCosts[surface], 0);
   const conditionMultiplier = { light: .9, typical: 1, heavy: 1.25 }[conditionSelect.value];
