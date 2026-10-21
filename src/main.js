@@ -3,6 +3,15 @@ import { gsap } from 'gsap';
 import { createMotionSystem } from './motion.js';
 
 const brandMark = '<img src="/marea-alta-mark.svg" width="40" height="40" alt="" />';
+const gaugeTicks = Array.from({ length: 41 }, (_, index) => {
+  const angle = (-180 + index * 4.5) * Math.PI / 180;
+  const major = index % 10 === 0;
+  const x1 = 180 + Math.cos(angle) * (major ? 126 : 132);
+  const y1 = 180 + Math.sin(angle) * (major ? 126 : 132);
+  const x2 = 180 + Math.cos(angle) * 145;
+  const y2 = 180 + Math.sin(angle) * 145;
+  return `<line class="gauge-tick${major ? ' is-major' : ''}" x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" />`;
+}).join('');
 
 document.querySelector('#main').innerHTML = `
   <header class="site-header">
@@ -135,6 +144,76 @@ document.querySelector('#main').innerHTML = `
       <input class="compare-range" id="compare-range" type="range" min="0" max="100" value="50" aria-label="Before and after comparison. Drag to reveal the clean house." aria-valuetext="50% before, 50% after" />
       <figcaption class="sr-only">A before and after view of a home exterior cleaned in one visit. The trailer and equipment remain in the driveway in both images.</figcaption>
     </figure>
+  </section>
+
+  <section class="pressure-section" id="pressure-gauge" aria-labelledby="pressure-title">
+    <div class="pressure-copy">
+      <p class="section-eyebrow">Not everything gets blasted</p>
+      <h2 id="pressure-title">The right pressure for every surface.</h2>
+      <p>Damage comes from using one setting on everything. We match the pressure, chemistry, and tool to what we’re cleaning.</p>
+      <div class="surface-picker" role="group" aria-label="Choose a surface">
+        <button type="button" class="surface-chip" data-surface="siding" aria-pressed="false">Siding</button>
+        <button type="button" class="surface-chip" data-surface="roof" aria-pressed="false">Roof</button>
+        <button type="button" class="surface-chip is-selected" data-surface="driveway" aria-pressed="true">Driveway</button>
+        <button type="button" class="surface-chip" data-surface="deck" aria-pressed="false">Deck</button>
+        <button type="button" class="surface-chip" data-surface="gutters" aria-pressed="false">Gutters</button>
+      </div>
+    </div>
+    <div class="gauge-card" aria-live="polite">
+      <div class="gauge-card-top"><span class="gauge-status"><i></i> Surface matched</span><span class="gauge-units">PSI</span></div>
+      <div class="gauge-wrap">
+        <svg class="pressure-gauge" viewBox="0 0 360 220" role="img" aria-labelledby="gauge-svg-title gauge-svg-description">
+          <title id="gauge-svg-title">Cleaning pressure gauge</title>
+          <desc id="gauge-svg-description">Needle shows the selected surface's recommended pressure.</desc>
+          <path class="gauge-arc-track" d="M 35 180 A 145 145 0 0 1 325 180" />
+          <path class="gauge-arc-value" id="gauge-arc" d="M 35 180 A 145 145 0 0 1 325 180" />
+          ${gaugeTicks}
+          <text class="gauge-label" x="35" y="202">0k</text><text class="gauge-label" x="78" y="86">1k</text>
+          <text class="gauge-label" x="174" y="45">2k</text><text class="gauge-label" x="275" y="86">3k</text>
+          <text class="gauge-label" x="315" y="202">4k</text>
+          <g class="gauge-needle" id="gauge-needle"><path d="M 176 181 L 180 67 L 184 181 Z"/><circle cx="180" cy="180" r="9"/></g>
+        </svg>
+      </div>
+      <div class="gauge-reading"><strong id="pressure-reading">3,000–4,000 PSI</strong><span>at the surface</span></div>
+      <div class="gauge-method"><div><span>Method</span><strong id="pressure-method">Pressure wash</strong></div><div><span>Tool</span><strong id="pressure-tool">20-inch surface cleaner + wand edges</strong></div></div>
+    </div>
+  </section>
+
+  <section class="care-section" aria-labelledby="care-title">
+    <div class="care-heading"><p class="section-eyebrow">Care comes standard</p><h2 id="care-title">Clean, not damaged.</h2><p>We take the time to choose a method that respects the material and the people around it.</p></div>
+    <div class="care-cards">
+      <article class="care-card"><span class="care-icon" aria-hidden="true">✓</span><div><h3>Fully insured</h3><p>Your home is protected while our crew is on site.</p></div></article>
+      <article class="care-card"><span class="care-icon care-icon-shield" aria-hidden="true">⌂</span><div><h3>Safe for your surfaces</h3><p>Soft wash protects shingles, paint, and wood.</p></div></article>
+      <article class="care-card"><span class="care-icon care-icon-drop" aria-hidden="true">✳</span><div><h3>Thoughtful rinse</h3><p>Plant-conscious products and a careful rinse around your home.</p></div></article>
+    </div>
+  </section>
+
+  <section class="quote-section" id="instant-quote" aria-labelledby="quote-title">
+    <div class="quote-heading"><p class="section-eyebrow">A clear place to start</p><h2 id="quote-title">Price your house in 20 seconds.</h2><p>Build a quick estimate around your home and the surfaces you’d like us to clean.</p></div>
+    <div class="quote-layout">
+      <div class="calculator-card">
+        <div class="calculator-header"><h3>Your project</h3><span class="estimate-time"><span aria-hidden="true">◷</span> About 20 seconds</span></div>
+        <div class="calculator-field size-field"><div class="field-heading"><label for="home-size">Home size</label><output id="home-size-output" for="home-size">2,200 sq ft</output></div><input id="home-size" type="range" min="700" max="5000" step="100" value="2200" aria-describedby="size-help"><div class="range-ends"><span>700 sq ft</span><span>5,000 sq ft</span></div><span class="sr-only" id="size-help">Choose an approximate home size.</span></div>
+        <fieldset class="calculator-field"><legend>What should we clean?</legend><div class="quote-surface-picker" role="group" aria-label="Select the surfaces to clean">
+          <button type="button" class="quote-chip is-selected" data-quote-surface="house" aria-pressed="true">House</button><button type="button" class="quote-chip is-selected" data-quote-surface="roof" aria-pressed="true">Roof</button><button type="button" class="quote-chip is-selected" data-quote-surface="driveway" aria-pressed="true">Driveway</button><button type="button" class="quote-chip" data-quote-surface="deck" aria-pressed="false">Deck</button><button type="button" class="quote-chip" data-quote-surface="gutters" aria-pressed="false">Gutters</button>
+        </div></fieldset>
+        <div class="calculator-field condition-field"><label for="condition">Current condition</label><select id="condition"><option value="light">Light buildup</option><option value="typical" selected>Typical buildup</option><option value="heavy">Heavy buildup</option></select></div>
+        <div class="estimate-panel" aria-live="polite"><span class="estimate-label">Your planning range</span><strong id="quote-price">$725–$1,235</strong><span id="estimate-note">Final price confirmed after a quick review.</span></div>
+      </div>
+      <form class="lead-card" id="quote-form" novalidate>
+        <h3>Get your exact price</h3><p class="lead-intro">Leave a few details and we’ll follow up with a precise quote.</p>
+        <div class="form-field"><label for="lead-name">Your name</label><input id="lead-name" name="name" autocomplete="name" required placeholder="Jordan Lee"></div>
+        <div class="form-field"><label for="lead-email">Email <span>(optional)</span></label><input id="lead-email" name="email" type="email" autocomplete="email" placeholder="jordan@example.com"></div>
+        <div class="form-field"><label for="lead-phone">Phone <span>(optional)</span></label><input id="lead-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(809) 555-0142"></div>
+        <p class="contact-help" id="contact-help">Add an email or phone so we know where to reply.</p>
+        <div class="form-field"><label for="lead-address">Service address</label><input id="lead-address" name="address" autocomplete="street-address" required placeholder="Street, neighborhood, city"></div>
+        <p class="form-error" id="form-error" role="alert" hidden></p>
+        <button class="submit-quote" type="submit">Get my exact price <span aria-hidden="true">→</span></button>
+        <p class="privacy-note"><span aria-hidden="true">♢</span> Your details stay private. No spam, just your quote.</p>
+        <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+        <input type="hidden" name="quote_range" id="quote-range-hidden" value="$725–$1,235">
+      </form>
+    </div>
   </section>
 `;
 
@@ -520,10 +599,177 @@ function updateComparison() {
 comparisonRange.addEventListener('input', updateComparison);
 comparisonRange.addEventListener('change', updateComparison);
 
+const pressureData = {
+  siding: { value: 200, range: '100–300 PSI', method: 'Soft wash', tool: 'Low-pressure rinse + detergent' },
+  roof: { value: 180, range: 'Under 300 PSI', method: 'Soft wash', tool: 'Low-pressure application + rinse' },
+  driveway: { value: 3500, range: '3,000–4,000 PSI', method: 'Pressure wash', tool: '20-inch surface cleaner + wand edges' },
+  deck: { value: 950, range: '500–1,500 PSI', method: 'Controlled pressure wash', tool: 'Fan tip + grain-aware passes' },
+  gutters: { value: 450, range: 'Under 1,000 PSI', method: 'Soft wash', tool: 'Low-pressure rinse + gutter brightener' },
+};
+const gaugeNeedle = document.querySelector('#gauge-needle');
+const gaugeArc = document.querySelector('#gauge-arc');
+const pressureReading = document.querySelector('#pressure-reading');
+const pressureMethod = document.querySelector('#pressure-method');
+const pressureTool = document.querySelector('#pressure-tool');
+let gaugeAnimation;
+const gaugeAngle = { value: 67.5 };
+function selectPressureSurface(surface) {
+  const data = pressureData[surface];
+  document.querySelectorAll('.surface-chip').forEach((chip) => {
+    const selected = chip.dataset.surface === surface;
+    chip.classList.toggle('is-selected', selected);
+    chip.setAttribute('aria-pressed', String(selected));
+  });
+  pressureReading.textContent = data.range;
+  pressureMethod.textContent = data.method;
+  pressureTool.textContent = data.tool;
+  const targetRotation = -90 + (data.value / 4000) * 180;
+  const circumference = 2 * Math.PI * 145;
+  gaugeArc.style.strokeDashoffset = String(circumference * (1 - data.value / 4000));
+  gaugeAnimation?.kill();
+  gaugeAnimation = gsap.to(gaugeAngle, {
+    value: targetRotation,
+    duration: reducedMotion.matches ? 0 : 0.9,
+    ease: reducedMotion.matches ? 'none' : 'elastic.out(1, 0.48)',
+    onUpdate: () => gaugeNeedle.setAttribute('transform', `rotate(${gaugeAngle.value} 180 180)`),
+  });
+}
+document.querySelectorAll('.surface-chip').forEach((chip) => chip.addEventListener('click', () => selectPressureSurface(chip.dataset.surface)));
+selectPressureSurface('driveway');
+
+const quoteForm = document.querySelector('#quote-form');
+const homeSize = document.querySelector('#home-size');
+const homeSizeOutput = document.querySelector('#home-size-output');
+const conditionSelect = document.querySelector('#condition');
+const quotePrice = document.querySelector('#quote-price');
+const estimateNote = document.querySelector('#estimate-note');
+const quoteRangeHidden = document.querySelector('#quote-range-hidden');
+const formError = document.querySelector('#form-error');
+const formStatus = document.querySelector('#form-status');
+const quotePriceState = { low: 725, high: 1235 };
+let priceAnimation;
+function selectedQuoteSurfaces() {
+  return [...document.querySelectorAll('.quote-chip.is-selected')].map((chip) => chip.dataset.quoteSurface);
+}
+function roundToFive(value) { return Math.round(value / 5) * 5; }
+function formatCurrency(value) { return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value); }
+function updateQuote() {
+  const size = Number(homeSize.value);
+  const selected = selectedQuoteSurfaces();
+  const scale = size / 2200;
+  const surfaceCosts = { house: 300 * scale, roof: 340 * scale, driveway: 265 * Math.sqrt(scale), deck: 250 * Math.sqrt(scale), gutters: 180 * Math.sqrt(scale) };
+  const base = selected.reduce((sum, surface) => sum + surfaceCosts[surface], 0);
+  const conditionMultiplier = { light: .9, typical: 1, heavy: 1.25 }[conditionSelect.value];
+  const low = base ? roundToFive(base * conditionMultiplier * .8) : 0;
+  const high = base ? roundToFive(base * conditionMultiplier * 1.365) : 0;
+  homeSizeOutput.textContent = `${new Intl.NumberFormat('en-US').format(size)} sq ft`;
+  const progress = ((size - Number(homeSize.min)) / (Number(homeSize.max) - Number(homeSize.min))) * 100;
+  homeSize.style.setProperty('--range-progress', `${progress}%`);
+  estimateNote.textContent = selected.length ? 'Final price confirmed after a quick review.' : 'Choose at least one surface to see your range.';
+  priceAnimation?.kill();
+  priceAnimation = gsap.to(quotePriceState, {
+    low, high,
+    duration: reducedMotion.matches ? 0 : .45,
+    ease: 'power2.out',
+    onUpdate: () => {
+      const rangeText = `${formatCurrency(Math.round(quotePriceState.low / 5) * 5)}–${formatCurrency(Math.round(quotePriceState.high / 5) * 5)}`;
+      quotePrice.textContent = rangeText;
+      quoteRangeHidden.value = rangeText;
+    },
+  });
+}
+document.querySelectorAll('.quote-chip').forEach((chip) => chip.addEventListener('click', () => {
+  const selected = !chip.classList.contains('is-selected');
+  chip.classList.toggle('is-selected', selected);
+  chip.setAttribute('aria-pressed', String(selected));
+  updateQuote();
+}));
+homeSize.addEventListener('input', updateQuote);
+conditionSelect.addEventListener('change', updateQuote);
+updateQuote();
+
+quoteForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  formError.hidden = true;
+  formStatus.replaceChildren();
+  const email = quoteForm.elements.email.value.trim();
+  const phone = quoteForm.elements.phone.value.trim();
+  const contactHelp = document.querySelector('#contact-help');
+  if (!quoteForm.elements.name.value.trim() || !quoteForm.elements.address.value.trim()) {
+    formError.textContent = 'Add your name and service address to continue.';
+    formError.hidden = false;
+    (!quoteForm.elements.name.value.trim() ? quoteForm.elements.name : quoteForm.elements.address).focus();
+    return;
+  }
+  if (!email && !phone) {
+    formError.textContent = 'Add an email or phone number so we can send your quote.';
+    formError.hidden = false;
+    quoteForm.elements.email.focus();
+    contactHelp.textContent = 'Please add at least one way for us to reply.';
+    contactHelp.classList.add('has-error');
+    return;
+  }
+  if (email && !quoteForm.elements.email.validity.valid) {
+    contactHelp.classList.remove('has-error');
+    formError.textContent = 'Check the email address and try again.';
+    formError.hidden = false;
+    quoteForm.elements.email.focus();
+    return;
+  }
+  contactHelp.textContent = 'Add an email or phone so we know where to reply.';
+  contactHelp.classList.remove('has-error');
+  if (!selectedQuoteSurfaces().length) {
+    formError.textContent = 'Choose at least one surface before requesting a quote.';
+    formError.hidden = false;
+    document.querySelector('.quote-surface-picker').scrollIntoView({ block: 'center', behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+    return;
+  }
+  const button = quoteForm.querySelector('.submit-quote');
+  button.disabled = true;
+  button.textContent = 'Sending your request…';
+  const endpoint = import.meta.env.VITE_LEAD_ENDPOINT;
+  try {
+    if (endpoint) {
+      const formData = new FormData(quoteForm);
+      formData.set('home_size_sq_ft', homeSize.value);
+      formData.set('surfaces', selectedQuoteSurfaces().join(', '));
+      formData.set('condition', conditionSelect.options[conditionSelect.selectedIndex].text);
+      const response = await fetch(endpoint, { method: 'POST', headers: { Accept: 'application/json' }, body: formData });
+      if (!response.ok) throw new Error('Quote request failed');
+      formStatus.textContent = 'Your request is in. We’ll follow up with your exact price shortly.';
+    } else {
+      const recipient = import.meta.env.VITE_LEAD_EMAIL || 'hello@example.com';
+      const subject = encodeURIComponent(`Quote request from ${quoteForm.elements.name.value.trim()}`);
+      const body = encodeURIComponent([
+        `Name: ${quoteForm.elements.name.value.trim()}`,
+        `Email: ${email || 'Not provided'}`,
+        `Phone: ${phone || 'Not provided'}`,
+        `Service address: ${quoteForm.elements.address.value.trim()}`,
+        `Home size: ${homeSizeOutput.textContent}`,
+        `Surfaces: ${selectedQuoteSurfaces().join(', ')}`,
+        `Condition: ${conditionSelect.options[conditionSelect.selectedIndex].text}`,
+        `Planning range: ${quoteRangeHidden.value}`,
+      ].join('\n'));
+      const link = document.createElement('a');
+      link.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+      link.textContent = `Open your email app to send your request to ${recipient}`;
+      formStatus.append('Your quote details are ready. ', link);
+    }
+  } catch {
+    formError.textContent = 'We couldn’t send that just now. Please try again in a moment.';
+    formError.hidden = false;
+  } finally {
+    button.disabled = false;
+    button.innerHTML = 'Get my exact price <span aria-hidden="true">→</span>';
+  }
+});
+
 if (import.meta.hot) {
   import.meta.hot.dispose(() => {
     motion.destroy();
     scrollAnimations.revert();
+    gaugeAnimation?.kill();
+    priceAnimation?.kill();
     reducedMotion.removeEventListener('change', onReducedMotionChange);
     resizeObserver?.disconnect();
     if (particleFrame) cancelAnimationFrame(particleFrame);
