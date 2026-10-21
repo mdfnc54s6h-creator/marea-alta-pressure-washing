@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Placeholder de lavado residencial</title><desc id="desc">Gráfico temporal para sustituir por fotografía real de lavado exterior residencial.</desc>
+  <defs><linearGradient id="g" x2="0" y2="1"><stop stop-color="#1a2c39"/><stop offset="1" stop-color="#0b1118"/></linearGradient></defs>
+  <rect width="1200" height="800" fill="url(#g)"/><path d="m275 370 325-230 325 230v280H275Z" fill="#253846" stroke="#506272" stroke-width="4"/><path d="M475 650V430h250v220M180 680h840" stroke="#ffd21f" stroke-width="4" opacity=".75"/><text x="60" y="100" fill="#ffd21f" font-family="Arial,sans-serif" font-size="24" letter-spacing="4">PLACEHOLDER · HOUSE WASH</text>
+</svg>

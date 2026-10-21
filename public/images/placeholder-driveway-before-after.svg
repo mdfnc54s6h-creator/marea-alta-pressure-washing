@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Placeholder de entrada antes y después</title><desc id="desc">Gráfico temporal para sustituir por fotografía real de una entrada lavada a presión.</desc>
+  <defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#182632"/><stop offset="1" stop-color="#0b1118"/></linearGradient></defs>
+  <rect width="1200" height="800" fill="url(#g)"/><path d="M0 560 600 260l600 300v240H0Z" fill="#223440"/><path d="M600 260v540" stroke="#ffd21f" stroke-width="3" stroke-dasharray="12 14" opacity=".7"/><text x="60" y="100" fill="#ffd21f" font-family="Arial,sans-serif" font-size="24" letter-spacing="4">PLACEHOLDER · DRIVEWAY BEFORE / AFTER</text>
+</svg>
